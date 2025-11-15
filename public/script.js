@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io("https://socket-io-repo-test.onrender.com");
 const canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
 

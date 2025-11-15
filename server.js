@@ -2,17 +2,10 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io"; 
 
-const PORT = 3000; 
-
-const express = require("express");
-const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "*"
-  }
-});
-
+const app = express(); 
+const server = http.createServer(app);
+const io = new Server(server);
+//tells our server to use public folder to serve our files (index.html, style.css, main.js)
 app.use(express.static("public"));
 
 io.on("connection", (socket) => {
@@ -36,6 +29,8 @@ io.on("connection", (socket) => {
     });
 }); 
 
-server.listen(PORT, () => {
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => { 
     console.log(`Server is running on http://localhost:${PORT}`);
-});
+ });
+

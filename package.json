@@ -15,5 +15,13 @@
     "express": "^5.1.0",
     "http": "^0.0.1-security",
     "socket.io": "^4.8.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snavc270/socket.io_repo_test.git"
+  },
+  "bugs": {
+    "url": "https://github.com/snavc270/socket.io_repo_test/issues"
+  },
+  "homepage": "https://github.com/snavc270/socket.io_repo_test#readme"
 }
