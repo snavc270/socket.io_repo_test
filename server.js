@@ -9,7 +9,7 @@ const app = express();
 const server = http.createServer(app);
 
 // Serve your public folder (index.html, style.css, main.js) if you want Render to serve the frontend too
-app.use(express.static("public"));
+app.use(express.static("docs"));
 
 // Socket.io server with CORS for your GH Pages frontend
 const io = new Server(server, {
