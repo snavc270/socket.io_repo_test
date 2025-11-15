@@ -1,36 +1,45 @@
 import express from "express";
 import http from "http";
-import { Server } from "socket.io"; 
+import { Server } from "socket.io";
 
-const app = express(); 
+// Use the port Render provides, or default to 3000 for local dev
+const PORT = process.env.PORT || 3000;
+
+const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-//tells our server to use public folder to serve our files (index.html, style.css, main.js)
+
+// Serve your public folder (index.html, style.css, main.js) if you want Render to serve the frontend too
 app.use(express.static("public"));
 
+// Socket.io server with CORS for your GH Pages frontend
+const io = new Server(server, {
+  cors: {
+    origin: "https://snavc270.github.io", // your GH Pages domain
+    methods: ["GET", "POST"]
+    // You can also use origin: "*" for testing
+  }
+});
+
 io.on("connection", (socket) => {
-    console.log("User connected: " + socket.id );
+  console.log("User connected: " + socket.id);
 
-    socket.on("draw", (data) => {
-        //broadcast to all other users except the one who sent the data
-        socket.broadcast.emit("draw", data);
-    });
+  socket.on("draw", (data) => {
+    socket.broadcast.emit("draw", data);
+  });
 
-    socket.on("moveRectangle", (data) => {
-        socket.broadcast.emit("moveRectangle", data);
-    }); 
+  socket.on("moveRectangle", (data) => {
+    socket.broadcast.emit("moveRectangle", data);
+  });
 
-    socket.on("clear", () => {
-        socket.broadcast.emit("clear");
-    }); 
+  socket.on("clear", () => {
+    socket.broadcast.emit("clear");
+  });
 
-    socket.on("disconnect", () => {
-        console.log("User disconnected: " + socket.id);
-    });
-}); 
+  socket.on("disconnect", () => {
+    console.log("User disconnected: " + socket.id);
+  });
+});
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => { 
-    console.log(`Server is running on http://localhost:${PORT}`);
- });
-
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
